@@ -10,6 +10,21 @@ const pointsLargeStraight = 40
 const lengthSmallStraight = 4
 const lengthLargeStraight = 5
 
+//return true iff the given array has the same content as one array in the list of arrays
+function isElementOf(array, listOfArrays) {
+    for (let i = 0; i < listOfArrays.length; i++) {
+        if (haveSameContent(array, listOfArrays[i])) {
+            return true
+        }
+    }
+    return false
+}
+
+//helper function: test if arrays have same content
+function haveSameContent(arrayA, arrayB) {
+    return JSON.stringify(arrayA) === JSON.stringify(arrayB)
+}
+
 
 // dice array of 5 elements
 function calculatePointsLowerSection(number, dice) {
@@ -44,7 +59,7 @@ function calculatePointsNOfAKind(n, dice) {
     const occurences = getOccurences(dice)
     for (let i = 0; i < occurences.length; i++) {
         if (occurences[i] >= n) {
-            return sum(dice)
+            return getSum(dice)
         }
     }
     return 0
@@ -75,13 +90,22 @@ function calculatePointsStraight(dice, large) {
             zeroOccurenceIndices.push(i)
         }
     }
+    const isLargeStraight = isElementOf(zeroOccurenceIndices, [[0], [occurences.length - 1]])
     if (large) {
-        //a large straight must show each possible dice value expect one
-        return zeroOccurenceIndices.length === 1 ? pointsLargeStraight : 0
+        //a large straight must show each possible dice value expect one        
+        return isLargeStraight ? pointsLargeStraight : 0
     } else {
-        let isSmallStraight = (zeroOccurenceIndices === [0, 1]
-            || zeroOccurenceIndices === [0, dieHeighestValue - 1]
-            || zeroOccurenceIndices === [dieHeighestValue - 2, dieHeighestValue - 1])
+        // a small straight is either a large straigt or missing to value at one end
+        // or missing one value at each end
+        // or missing second heighest or second lowest value only
+        const isSmallStraight =
+            isLargeStraight
+            || isElementOf(zeroOccurenceIndices,
+                [[0, 1],
+                [0, dieHeighestValue - 1],
+                [dieHeighestValue - 2, dieHeighestValue - 1],
+                [dieHeighestValue - 2],
+                [1]])
         return isSmallStraight ? pointsSmallStraight : 0
     }
 }
