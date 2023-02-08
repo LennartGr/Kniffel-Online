@@ -11,7 +11,7 @@ export default function App() {
 
   //lazy state initialisation
   const [playerData, setPlayerData] = useState(() => initPlayerData())
-  
+
   const [dice, setDice] = useState(allNewDice())
   const [rollsLeft, setRollsLeft] = useState(numberRollsPerTurn)
 
@@ -29,6 +29,10 @@ export default function App() {
       newDice.push(generateNewDie())
     }
     return newDice
+  }
+
+  function getDiceValues() {
+    return dice.map(die => die.value)
   }
 
   function rollDice() {
@@ -59,13 +63,39 @@ export default function App() {
     />
   ))
 
+  //set a specific category to used and attribute the achived points to the right player
+  //TODO it's the next players turn when this method returns true
+  function setCategoryToUsed(playerId, categoryText) {
+    let updateSuccessful = true
+    const playerDataCopy = playerData.map(entry => entry)
+    //modify points account of the specific player
+    playerDataCopy[playerId].pointsAccount = playerDataCopy[playerId].pointsAccount.map(category => {
+      if (category.text !== categoryText) {
+        return category
+      }
+      //found the right category
+      if (category.used) {
+        //it was already used, no update
+        updateSuccessful = false
+        return category
+      }
+      //it was not already used. We update it according to its update rule and the current dice situation
+      category.used = true
+      const pointsAchieved = category.calculatePoints(getDiceValues())
+      category.points = pointsAchieved
+      return category
+    })
+    setPlayerData(playerDataCopy)
+    return updateSuccessful
+  }
+
   return (
     <main>
       <h1 className="title">Kniffel</h1>
       <p className="instructions">Per turn, each player may roll at most three times.
-      After each roll, they may fix each die of their choice.
-      At the end of their turn, the active player must 
-      choose a category and receives points according to the current dice values.</p>
+        After each roll, they may fix each die of their choice.
+        At the end of their turn, the active player must
+        choose a category and receives points according to the current dice values.</p>
       <div className="dice-container">
         {diceElements}
       </div>
@@ -74,7 +104,7 @@ export default function App() {
         onClick={rollDice}>
         Roll dice
       </button>
-      <PlayerDataDisplay playerData={playerData} />
+      <PlayerDataDisplay playerData={playerData} onCategoryClick={setCategoryToUsed} />
     </main>
   )
 }

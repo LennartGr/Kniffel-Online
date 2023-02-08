@@ -9,7 +9,7 @@ export default function PlayerDataDisplay(props) {
         const accountContent = playerData[playerNr].pointsAccount.map(category => {
             return (
                 <div className={"category"  + (category.used ? " used" : "")}>
-                    <span className="category--title">
+                    <span className="category--title" onClick={() => props.onCategoryClick(playerNr, category.text)}>
                         {category.text}
                     </span>
                     <span className="category--points">
