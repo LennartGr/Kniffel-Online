@@ -1,0 +1,16 @@
+.category {
+    width: 80%;
+    margin: 4px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.category--title {
+    margin-right: 5px;
+    background-color: greenyellow;
+}
+
+.category.used .category--title {
+    background-color: grey;
+}
+

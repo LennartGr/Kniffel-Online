@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { numberPlayers, numberDice, initPlayerData } from './Logic/Logic'
 import Die from "./Components/Die"
+import PlayerDataDisplay from './Components/PlayerDataDisplay'
 import { nanoid } from "nanoid"
 
 export default function App() {
@@ -10,7 +11,7 @@ export default function App() {
 
   //lazy state initialisation
   const [playerData, setPlayerData] = useState(() => initPlayerData())
-  console.log(playerData)
+  
   const [dice, setDice] = useState(allNewDice())
   const [rollsLeft, setRollsLeft] = useState(numberRollsPerTurn)
 
@@ -73,6 +74,7 @@ export default function App() {
         onClick={rollDice}>
         Roll dice
       </button>
+      <PlayerDataDisplay playerData={playerData} />
     </main>
   )
 }
