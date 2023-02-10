@@ -8,12 +8,15 @@ import { nanoid } from "nanoid"
 export default function App() {
 
   const numberRollsPerTurn = 3
+  const firstActivePlayer = 0
 
   //lazy state initialisation
   const [playerData, setPlayerData] = useState(() => initPlayerData())
 
   const [dice, setDice] = useState(allNewDice())
+  const [activePlayerId, setActivePlayerId] = useState(firstActivePlayer)
   const [rollsLeft, setRollsLeft] = useState(numberRollsPerTurn)
+
 
   function generateNewDie() {
     return {
@@ -66,6 +69,9 @@ export default function App() {
   //set a specific category to used and attribute the achived points to the right player
   //TODO it's the next players turn when this method returns true
   function setCategoryToUsed(playerId, categoryText) {
+    if (activePlayerId !== playerId) {
+      return false
+    } 
     let updateSuccessful = true
     const playerDataCopy = playerData.map(entry => entry)
     //modify points account of the specific player
@@ -85,7 +91,12 @@ export default function App() {
       category.points = pointsAchieved
       return category
     })
-    setPlayerData(playerDataCopy)
+    if (updateSuccessful) {
+      setPlayerData(playerDataCopy)
+      //it's the move of the next player
+      setActivePlayerId(prevId => (prevId + 1) % numberPlayers)
+    }
+    
     return updateSuccessful
   }
 
@@ -100,11 +111,12 @@ export default function App() {
         {diceElements}
       </div>
       <button
-        className="roll-dice"
+        className={"roll-dice" + (rollsLeft > 0 ? " active" : "")}
         onClick={rollDice}>
         Roll dice
       </button>
-      <PlayerDataDisplay playerData={playerData} onCategoryClick={setCategoryToUsed} />
+      <p>Rolls left: {rollsLeft}</p>
+      <PlayerDataDisplay playerData={playerData} onCategoryClick={setCategoryToUsed} activePlayerId={activePlayerId} rollsLeft={rollsLeft} />
     </main>
   )
 }

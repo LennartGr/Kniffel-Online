@@ -18,7 +18,8 @@ export default function PlayerDataDisplay(props) {
                 </div>
             )
         })
-        playerDataRendered.push(<div className="singlePlayerData">
+        // push player data and mark active player
+        playerDataRendered.push(<div className={"singlePlayerData" + (playerNr === props.activePlayerId ? " active" : "")}>
             <h2>Account player {playerNr}</h2>
             {accountContent}
         </div>)

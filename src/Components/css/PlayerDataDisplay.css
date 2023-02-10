@@ -14,3 +14,11 @@
     background-color: grey;
 }
 
+.singlePlayerData {
+    border: 2px dotted grey;
+}
+
+.singlePlayerData.active {
+    border: 2px solid greenyellow;
+}
+
