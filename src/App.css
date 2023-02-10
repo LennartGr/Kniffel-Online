@@ -36,8 +36,9 @@ main {
 .dice-container {
     display: grid;
     grid-template: auto auto / repeat(5, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
+    column-gap: 20px;
+    margin-bottom: 20px;
+    position: relative;
 }
 
 .die-face {
@@ -53,6 +54,22 @@ main {
 
 .die-num {
     font-size: 2rem;
+}
+
+.sorting-symbol {
+    position: absolute;
+    right: -75px;
+    background-color: #5035FF;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sorting-symbol img {
+    height: 35px;
+    width: 35px;
+    filter: invert(100%);
+    transform: rotate(180deg);
 }
 
 .roll-dice {

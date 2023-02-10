@@ -1,24 +1,44 @@
+.playerDataDisplay {
+    display: flex;
+}
+
+.singlePlayerData {
+    padding: 5px;
+    margin: 0 4px;
+}
+
+.singlePlayerData.active {
+    border: 2px solid greenyellow;
+}
+
+.singlePlayerData h2 {
+    margin: 0
+}
+
 .category {
     width: 80%;
-    margin: 4px 0;
+    margin: 6px 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between;   
 }
 
 .category--title {
     margin-right: 5px;
     background-color: greenyellow;
+    padding: 2px 6px;
 }
 
 .category.used .category--title {
     background-color: grey;
 }
 
-.singlePlayerData {
-    border: 2px dotted grey;
+.active .category:not(.used) .category--title {
+    cursor: pointer;
 }
 
-.singlePlayerData.active {
-    border: 2px solid greenyellow;
+.inactive {
+    opacity: 0.6;
 }
+
+
 

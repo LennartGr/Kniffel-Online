@@ -4,10 +4,12 @@ import { numberPlayers, numberDice, initPlayerData } from './Logic/Logic'
 import Die from "./Components/Die"
 import PlayerDataDisplay from './Components/PlayerDataDisplay'
 import { nanoid } from "nanoid"
+import sortingSymbol from "./images/sorting-symbol.svg"
 
 export default function App() {
 
-  const numberRollsPerTurn = 3
+  // note: 
+  const numberRollsPerTurn = 2
   const firstActivePlayer = 0
 
   //lazy state initialisation
@@ -16,7 +18,6 @@ export default function App() {
   const [dice, setDice] = useState(allNewDice())
   const [activePlayerId, setActivePlayerId] = useState(firstActivePlayer)
   const [rollsLeft, setRollsLeft] = useState(numberRollsPerTurn)
-
 
   function generateNewDie() {
     return {
@@ -57,6 +58,14 @@ export default function App() {
     }))
   }
 
+  function sortDice() {
+    let diceCopy = dice.map(die => die)
+    diceCopy.sort(function (dieA, dieB) {
+      return dieA.value - dieB.value
+    })
+    setDice(diceCopy)
+  }
+
   const diceElements = dice.map(die => (
     <Die
       key={die.id}
@@ -71,7 +80,7 @@ export default function App() {
   function setCategoryToUsed(playerId, categoryText) {
     if (activePlayerId !== playerId) {
       return false
-    } 
+    }
     let updateSuccessful = true
     const playerDataCopy = playerData.map(entry => entry)
     //modify points account of the specific player
@@ -95,8 +104,9 @@ export default function App() {
       setPlayerData(playerDataCopy)
       //it's the move of the next player
       setActivePlayerId(prevId => (prevId + 1) % numberPlayers)
+      setRollsLeft(numberRollsPerTurn)
+      setDice(allNewDice())
     }
-    
     return updateSuccessful
   }
 
@@ -109,10 +119,13 @@ export default function App() {
         choose a category and receives points according to the current dice values.</p>
       <div className="dice-container">
         {diceElements}
+        <div className="sorting-symbol">
+          <img src={sortingSymbol} onClick={sortDice} />
+        </div>
       </div>
       <button
         className={"roll-dice" + (rollsLeft > 0 ? " active" : "")}
-        onClick={rollDice}>
+        onClick={rollDice} >
         Roll dice
       </button>
       <p>Rolls left: {rollsLeft}</p>
