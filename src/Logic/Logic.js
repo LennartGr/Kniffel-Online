@@ -10,6 +10,9 @@ const pointsLargeStraight = 40
 const lengthSmallStraight = 4
 const lengthLargeStraight = 5
 
+const bonusThreshold = 63
+const bonusValue = 35
+
 //return true iff the given array has the same content as one array in the list of arrays
 function isElementOf(array, listOfArrays) {
     for (let i = 0; i < listOfArrays.length; i++) {
@@ -108,6 +111,20 @@ function calculatePointsStraight(dice, large) {
                 [1]])
         return isSmallStraight ? pointsSmallStraight : 0
     }
+}
+
+function calculateBonus(pointsAccount) {
+    const bonusText = `More than ${bonusThreshold} points with aces, twos, ..., sixes?`
+    let sum = 0
+    //iterate categories aces, twos, ..., sixes
+    for(let i = 0; i < dieHeighestValue; i++) {
+        sum += pointsAccount[i].points
+    }
+    if (sum >= bonusThreshold) {
+        return {text: bonusText, achieved: true, bonusPoints: bonusValue}
+    }
+    return {text: bonusText, achieved: false, bonusPoints: 0}
+
 }
 
 function initPlayerData() {

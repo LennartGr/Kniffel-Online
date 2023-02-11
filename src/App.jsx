@@ -14,6 +14,9 @@ export default function App() {
 
   //lazy state initialisation
   const [playerData, setPlayerData] = useState(() => initPlayerData())
+  //how many categories are unused? The game is over iff the value is 0
+  const numberCategoriesPerPlayer = playerData.pointsAccount.length
+  const [unusedCategories, setUnusedCategories] = useState(numberPlayers * numberCategoriesPerPlayer)
 
   const [dice, setDice] = useState(allNewDice())
   const [activePlayerId, setActivePlayerId] = useState(firstActivePlayer)
@@ -106,6 +109,10 @@ export default function App() {
       setActivePlayerId(prevId => (prevId + 1) % numberPlayers)
       setRollsLeft(numberRollsPerTurn)
       setDice(allNewDice())
+      setUnusedCategories(prev => prev - 1)
+      if (unusedCategories === 0) {
+        console.log("GAME OVER")
+      }
     }
     return updateSuccessful
   }
