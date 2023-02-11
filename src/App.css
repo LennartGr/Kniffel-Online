@@ -21,6 +21,13 @@ main {
     align-items: center;
 }
 
+.middle-part {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center; 
+}
+
 .title {
     font-size: 40px;
     margin: 0;
