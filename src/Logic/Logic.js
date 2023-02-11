@@ -1,4 +1,5 @@
-const numberPlayers = 2
+// changed on initPlayerData()
+let numberPlayers = 2
 const numberDice = 5
 // we are using dice from value 1, 2, ..., this variable
 const dieHeighestValue = 6
@@ -152,14 +153,16 @@ function getWinnerIds(playerData) {
     return winnerIds
 }
 
-function initPlayerData() {
+// player start data: array of player start objects
+function initPlayerData(playerStartData) {
+    numberPlayers = playerStartData.length
     let playerData = []
     let category = { text: "", calculatePoints: dice => 0, used: false, points: 0 }
     for (let i = 0; i < numberPlayers; i++) {
         playerData.push(
             {
                 id: i,
-                name: i,
+                name: playerStartData[i].name,
                 pointsAccount: [
                     { ...category, text: "Aces", calculatePoints: dice => calculatePointsLowerSection(1, dice) },
                     { ...category, text: "Twos", calculatePoints: dice => calculatePointsLowerSection(2, dice) },

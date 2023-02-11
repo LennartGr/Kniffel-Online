@@ -14,7 +14,7 @@ export default function Gamescreen(props) {
   const firstActivePlayer = 0
 
   //lazy state initialisation
-  const [playerData, setPlayerData] = useState(() => initPlayerData())
+  const [playerData, setPlayerData] = useState(() => initPlayerData(props.playerStartData))
   //how many categories are unused? The game is over iff the value is 0
   const numberCategoriesPerPlayer = playerData[0].pointsAccount.length
   const [unusedCategories, setUnusedCategories] = useState(numberPlayers * numberCategoriesPerPlayer)
