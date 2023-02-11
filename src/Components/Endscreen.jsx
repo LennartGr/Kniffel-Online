@@ -37,7 +37,7 @@ export default function Endscreen(props) {
                 {pointCalculationPerPlayer}
             </div>
             {winnerDisplay}
-            <button>Rematch</button>
+            <button onClick={props.newGame}>Rematch</button>
         </div>
     )
 }
