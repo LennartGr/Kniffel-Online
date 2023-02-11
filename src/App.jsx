@@ -32,8 +32,10 @@ export default function App() {
                 <p>Add more players and set names</p>
                 <div className="player-start-card-container">
                     {playerStartCards}
+                    <div className="new-player-button" onClick={addPlayer}>
+                        +
+                    </div>
                 </div>
-                <button onClick={addPlayer}>Add player</button>
                 <button onClick={() => setGameStarted(true)}>Start Game</button>
             </div>
         )
