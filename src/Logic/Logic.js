@@ -113,18 +113,43 @@ function calculatePointsStraight(dice, large) {
     }
 }
 
-function calculateBonus(pointsAccount) {
+function calculatePoints(pointsAccount) {
     const bonusText = `More than ${bonusThreshold} points with aces, twos, ..., sixes?`
     let sum = 0
     //iterate categories aces, twos, ..., sixes
-    for(let i = 0; i < dieHeighestValue; i++) {
+    for (let i = 0; i < dieHeighestValue; i++) {
         sum += pointsAccount[i].points
     }
-    if (sum >= bonusThreshold) {
-        return {text: bonusText, achieved: true, bonusPoints: bonusValue}
+    let pointsInformation = {
+        total: sum,
+        sumWithoutBonus: sum,
+        bonusText: bonusText,
+        bonusAchieved: false,
+        bonusValue: 0
     }
-    return {text: bonusText, achieved: false, bonusPoints: 0}
+    if (sum >= bonusThreshold) {
+        return { total: sum + bonusValue, bonusAchieved: true, bonusValue: bonusValue, ...pointsInformation }
+    }
+    return pointsInformation
+}
 
+// returns a list of ids with all players who scored the heighest amount of points
+// thus, if this list contains more than one entry, there is a tie
+function getWinnerIds(playerData) {
+    let winnerIds = []
+    const totalPerPlayer = playerData.map(player => ({
+        id: player.id,
+        total: calculatePoints(player.pointsAccount).total
+    }))
+    //Math.max doesn't expect array as input, thus ... operator
+    let heighestTotal = Math.max(...totalPerPlayer.map(player => player.total))
+    console.log(`heighest total of ${heighestTotal}`)
+    for (let i = 0; i < numberPlayers; i++) {
+        if (totalPerPlayer[i].total === heighestTotal) {
+            winnerIds.push(totalPerPlayer[i].id)
+        }
+    }
+    return winnerIds
 }
 
 function initPlayerData() {
@@ -134,6 +159,7 @@ function initPlayerData() {
         playerData.push(
             {
                 id: i,
+                name: i,
                 pointsAccount: [
                     { ...category, text: "Aces", calculatePoints: dice => calculatePointsLowerSection(1, dice) },
                     { ...category, text: "Twos", calculatePoints: dice => calculatePointsLowerSection(2, dice) },
@@ -159,12 +185,15 @@ export {
     numberPlayers,
     numberDice,
     initPlayerData,
+    calculatePoints,
+    getWinnerIds,
     // for testing
     calculatePointsLowerSection,
     getOccurences,
     getSum,
     calculatePointsNOfAKind,
     calculatePointsFullHouse,
-    calculatePointsStraight
+    calculatePointsStraight,
+    
 }
 

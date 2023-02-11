@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import { numberPlayers, numberDice, initPlayerData } from './Logic/Logic'
+import { numberPlayers, numberDice, initPlayerData, calculatePoints, getWinnerIds } from './Logic/Logic'
 import Die from "./Components/Die"
 import PlayerDataDisplay from './Components/PlayerDataDisplay'
+import Endscreen from './Components/Endscreen'
 import { nanoid } from "nanoid"
 import sortingSymbol from "./images/sorting-symbol.svg"
 
@@ -120,24 +121,27 @@ export default function App() {
   if (!gameOver) {
     middlePart = (
       <div className="middle-part">
-      <div className="dice-container">
-        {diceElements}
-        <div className="sorting-symbol">
-          <img src={sortingSymbol} onClick={sortDice} />
+        <div className="dice-container">
+          {diceElements}
+          <div className="sorting-symbol">
+            <img src={sortingSymbol} onClick={sortDice} />
+          </div>
         </div>
-      </div>
-      <button
-        className={"roll-dice" + (rollsLeft > 0 ? " active" : "")}
-        onClick={rollDice} >
-        Roll dice
-      </button>
-      <p>Rolls left: {rollsLeft}</p>
+        <button
+          className={"roll-dice" + (rollsLeft > 0 ? " active" : "")}
+          onClick={rollDice} >
+          Roll dice
+        </button>
+        <p>Rolls left: {rollsLeft}</p>
       </div>
     )
   } else {
     middlePart = (
       <div className="middle-part">
-        GAME OVER
+        <Endscreen
+          playerData={playerData}
+          calculatePoints={calculatePoints} 
+          getWinnerIds={getWinnerIds} />
       </div>
     )
   }
@@ -151,6 +155,7 @@ export default function App() {
         choose a category and receives points according to the current dice values.</p>
       {middlePart}
       <PlayerDataDisplay playerData={playerData} onCategoryClick={setCategoryToUsed} activePlayerId={activePlayerId} rollsLeft={rollsLeft} />
+      <button onClick={() => setUnusedCategories(0)}>End game early</button>
     </main>
   )
 }

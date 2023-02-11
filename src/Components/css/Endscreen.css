@@ -1,0 +1,43 @@
+.end-screen * {
+    margin: 0;
+}
+
+.end-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bonus-describtion {
+    margin-bottom: 6px;
+}
+
+.points-information-container {
+    display: flex;
+    align-self: stretch;
+    justify-content: space-evenly;
+}
+
+.points-information {
+    width: fit-content;
+    position: relative;
+}
+
+.player-name {
+    margin-bottom: 5px;
+}
+
+.points-information p {
+    margin: 0;
+}
+
+.points-information span {
+    position: absolute;
+    right: -10px;
+}
+
+.calculation-line {
+    background-color: black;
+    height: 2px;
+    width: 120%;
+}
