@@ -1,0 +1,15 @@
+{
+  "name": "socket-counter-exemple",
+  "version": "0.0.1",
+  "description": "counter that can only be increased by a single user. The power to increase changes after every increase.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.6.0"
+  }
+}

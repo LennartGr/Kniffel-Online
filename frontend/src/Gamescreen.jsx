@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './Gamescreen.css'
-import { numberPlayers, numberDice, initPlayerData, calculatePoints, getWinnerIds } from './Logic/Logic'
+import { numberPlayers, numberDice, initPlayerData, calculatePoints, getWinnerIds } from '../../shared/Logic'
 import Die from "./Components/Die"
 import PlayerDataDisplay from './Components/PlayerDataDisplay'
 import Endscreen from './Components/Endscreen'
