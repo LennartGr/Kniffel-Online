@@ -3,7 +3,9 @@ import { useState, useEffect } from "react"
 import { io } from 'socket.io-client'
 import Gamescreen from "./Gamescreen"
 
-const socket = io('http://localhost:3000')
+const production = true
+const url = production ? 'https://kniffel-api.onrender.com' : 'http://localhost:3000'
+const socket = io(url)
 
 export default function App() {
     const [gameStarted, setGameStarted] = useState(false)
