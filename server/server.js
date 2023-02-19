@@ -1,22 +1,43 @@
+// CORS
+const cors = require('cors')
+const corsOptions = require('./config/corsOptions')
+// express and socket io
 const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"]
+      }
+});
+
 // if we deploy with render, first line is important
 const port = process.env.PORT || 3000;
 
 let counterValue = 0
 
-// in order to call the client.js script inside index.html 
-// (but not as an inline script),
-// we have to serve index.html statically
 app.use(express.static("public"))
+// uncomment to allow all cors
+//app.use(cors())
+app.use(cors(corsOptions))
 
-let clientSockets = []
-let activeSocket = null
+// use these lines to get all clients in a room
+// const clients = io.sockets.adapter.rooms.get('Room Name');
+// const numClients = clients ? clients.size : 0;
 
+// room map : room name => {information about room, e.g. ative socket}
+let roomMap = new Map();
+
+// test connection with api
+app.use('/about', (req, res) => {
+    res.json({name: "Kniffel", author: "Lennart"})
+})
+
+/*
+// TODO update
 function forgetClientSocket(id) {
     // special case: delete active socket
     if (activeSocket.id === id && clientSockets.length > 1) {
@@ -28,6 +49,7 @@ function forgetClientSocket(id) {
     clientSockets = clientSockets.filter(socket => socket.id !== id)
 }
 
+// TODO update
 function changePermission() {
     // socket.IO DOES guarantee message ordering, so we do not need to pay attention if there is only one socket
     io.to(activeSocket.id).emit("remove-permission")
@@ -36,31 +58,13 @@ function changePermission() {
     activeSocket = clientSockets[(i + 1) % clientSockets.length]
     io.to(activeSocket.id).emit("set-permission")
 }
+*/
 
 io.on("connection", (socket) => {
     console.log(`server recognized new connection with ${socket.id}`)
-    clientSockets.push(socket)
-    // the first client that connects has permission to increment the button
-    if (clientSockets.length === 1) {
-        activeSocket = socket
-        io.to(activeSocket.id).emit("set-permission")       
-    }
-    // update client's counter upon connecting to servers
-    // NOT socket.to(socket.id).emit() because this sends the message to everyone in the room EXPECT socket
-    io.to(socket.id).emit("set-value", counterValue)
-
+    
     socket.on("disconnect", () => {
-        forgetClientSocket(socket.id)
         console.log("user disconnected")
-    })
-    // when a client asks for an increment, send updated counter value to everyone
-    socket.on("increment", (msg) => {
-        console.log("received increment")
-        counterValue++
-        io.emit("set-value", counterValue)
-        //change permission
-        changePermission()
-        console.log(`new permission id is ${activeSocket.id}`)
     })
 })
 

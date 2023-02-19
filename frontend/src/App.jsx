@@ -1,13 +1,25 @@
 import "./App.css"
-import { useState } from "react"
-import Gamescreen from "./Gamescreen";
+import { useState, useEffect } from "react"
+import { io } from 'socket.io-client'
+import Gamescreen from "./Gamescreen"
+
+const socket = io('http://localhost:3000')
 
 export default function App() {
     const [gameStarted, setGameStarted] = useState(false)
-    const [playerStartData, setPlayerStartData] = useState([{name: "Player 1"}, {name: "Player 2"}])
-    
+    const [playerStartData, setPlayerStartData] = useState([{ name: "Player 1" }, { name: "Player 2" }])
+
+    // test Kniffel API
+    useEffect(() => {
+        fetch('http://localhost:3000/about')
+            .then((response) => response.json())
+            .then((data) => console.log(data));
+    }, [])
+
+    // connect to socketIO server
+
     function createNewPlayer(name) {
-        return {name: name}
+        return { name: name }
     }
 
     function addPlayer() {
