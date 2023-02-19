@@ -11,9 +11,15 @@ export default function App() {
     const [gameStarted, setGameStarted] = useState(false)
     const [playerStartData, setPlayerStartData] = useState([{ name: "Player 1" }, { name: "Player 2" }])
 
+    useEffect(() => {
+        socket.on('connect', () => {
+            console.log(`connected with id ${socket.id}`)
+          });
+    }, [])
+
     // test Kniffel API
     useEffect(() => {
-        fetch('http://localhost:3000/about')
+        fetch(`${url}/about`)
             .then((response) => response.json())
             .then((data) => console.log(data));
     }, [])
