@@ -1,6 +1,7 @@
 // CORS
 const cors = require('cors')
-const corsOptions = require('./config/corsOptions')
+// const corsOptions = require('./config/corsOptions')
+const corsOptions = { origin: true, optionsSuccessStatus: 200 }
 // express and socket io
 const express = require('express');
 const app = express();
